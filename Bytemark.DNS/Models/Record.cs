@@ -13,7 +13,7 @@ namespace Bytemark.DNS.Models
         public int ID { get; set; }
 
         [JsonProperty("domain_id"), JsonRequired]
-        public int Domain_ID { get; set; }
+        public int DomainID { get; set; }
 
         /// <summary>
         /// Fully qualified hostname for the record. Must be a sub-domain of
