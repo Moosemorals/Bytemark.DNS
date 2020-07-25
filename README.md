@@ -23,10 +23,8 @@ even less text).
     1.1 Dotnet core - Follow Microsoft's instructions: https://docs.microsoft.com/en-us/dotnet/core/install/linux-debian
 
     1.2 Certbot - 
-
-        ```
+    
         # apt install certbot
-        ```
 
 2. Clone this repo:
 
