@@ -33,6 +33,7 @@ namespace Bytemark.DNS
             }
 
             if (string.Equals(args[0], "authhook", StringComparison.OrdinalIgnoreCase)) {
+		Console.WriteLine("Running Authhook");
                 return await AuthHookAsync(config);
             } else if (string.Equals(args[0], "cleanup", StringComparison.OrdinalIgnoreCase)) {
                 return await Cleanup(config);
@@ -75,9 +76,11 @@ namespace Bytemark.DNS
 
             if (!result.IsSuccess) {
                 //TODO: Proper logging
-                Console.WriteLine("Couldn't create challenge record: {0}", result.Error);
+                Console.WriteLine("Couldn't create challenge record for {1}: {0}", result.Error, target.Name);
                 return 1;
             }
+
+	    Console.WriteLine("Added challenge record for {0}", target.Name);
 
             // Success!
             return 0;
@@ -107,6 +110,7 @@ namespace Bytemark.DNS
 
             foreach (Record r in target.Records) {
                 if (r.Name.StartsWith(ACME_Challenge)) {
+		    Console.WriteLine("Deleting challenge record {0}", r.Name);
                     Result<string> deleteResult = await _dns.DeleteRecordAsync(r.ID);
                     if (!deleteResult.IsSuccess) {
                         // TODO: Proper logging
