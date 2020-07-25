@@ -1,7 +1,7 @@
 
 # Bytemark DNS - Automation tool for the Bytemark Content DNS service
 
-I have been a happy customer of Bytemark for more years than I care to
+I have been a happy customer of [Bytemark](https://bytemark.co.uk) for more years than I care to
 remember. Sometime in the last few years they've updated their 'content
 DNS' (DNS hosting) service from a [TinyDNS](https://cr.yp.to/djbdns/tinydns.html)/rsync
 based system to one using a JSON/REST web frontend.
@@ -53,7 +53,7 @@ even less text).
    $  dotnet publish --output target --no-self-contained --nologo --configuration Release
    ```
 
-5. Install the two shell scripts ((authhook.sh)[scripts/authhook.sh] and (cleanup.sh)[scripts/cleanup.sh])
+5. Install the two shell scripts ([authhook.sh](scripts/authhook.sh) and [cleanup.sh](scripts/cleanup.sh))
    somewhere that root can run them.
 
    ```
@@ -63,10 +63,11 @@ even less text).
 
 6. Change the paths in the scripts to point at the `target` directory from step 4.
 
-7. Generate certificates
+7. Generate certificates (split onto two lines to make it easier to read, should only be one)
 
    ```
-   $ sudo certbot certonly --manual --preferred-challenges=dns --manual-auth-hook /root/bin/auth-hook.sh --manual-cleanup-hook /root/bin/cleanup.sh --manual-public-ip-logging-ok -d example.com -d "*.example.com"
+   $ sudo certbot certonly -d example.com -d "*.example.com" --manual --preferred-challenges=dns 
+       --manual-auth-hook /root/bin/auth-hook.sh --manual-cleanup-hook /root/bin/cleanup.sh --manual-public-ip-logging-ok 
    ```
 
 ## How it works
@@ -81,5 +82,4 @@ you're asking for, creates the appropriate TXT record, and then cleans up after 
 # Support
 
 Any problems, please raise an issue, although this is a toy for me so please have low
-expectations about speedy resolution. (Also, talk to (Bytemark Suppprt)[https://www.bytemark.co.uk/support/]
-if you've got problems with their DNS host - I'm just a customer)
+expectations about speedy resolution.
