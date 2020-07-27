@@ -35,9 +35,9 @@ namespace Bytemark.DNS.Commands
                     }
                     Console.WriteLine();
                 }
-                return 0;
+                return ICommand.Success;
             } else {
-                return 1;
+                return ICommand.Fail;
             }
         }
     }

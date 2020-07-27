@@ -12,9 +12,6 @@ namespace Bytemark.DNS.Commands
 {
     internal class CreateRecord : ICommand
     {
-        private static readonly int Fail = 1 ;
-        private static readonly int Success = 0;
-
         public string Noun => "Record";
 
         public string Verb => "Create";
@@ -30,26 +27,25 @@ namespace Bytemark.DNS.Commands
 
             if (string.IsNullOrEmpty(rawType) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(rawTTL) || string.IsNullOrEmpty(content)) {
                 Console.WriteLine("Missing parameter");
-                return Fail;
+                return ICommand.Fail;
             }
 
             if (!Enum.TryParse<RecordType>(rawType, out RecordType type)) {
                 Console.Write("Invalid value for --type: {0}", rawType);
-                return Fail;
+                return ICommand.Fail;
             }
 
             if (!name.Contains('.')) {
                 Console.Write("--name must be a fully qualified domain name");
-                return Fail;
+                return ICommand.Fail;
             }
 
             if (!int.TryParse(rawTTL, out int TTL)) {
                 Console.Write("--ttl must be a whole number of seconds");
-                return Fail;
+                return ICommand.Fail;
             }
 
             Domain target = null;
-
             Result<IEnumerable<Domain>> domains = await client.ListDomainsAsync(Overview: true);
             if (domains.IsSuccess) {
                 foreach (Domain d in domains.Payload) {
@@ -60,12 +56,12 @@ namespace Bytemark.DNS.Commands
                 }
             } else {
                 Console.WriteLine("Could not fetch list of current domains: {0}", domains.Error);
-                return Fail;
+                return ICommand.Fail;
             }
 
             if (target == null) {
                 Console.WriteLine("Could not find target domain");
-                return Fail;
+                return ICommand.Fail;
             }
 
             var create = await client.CreateRecordAsync(new Record {
@@ -79,10 +75,10 @@ namespace Bytemark.DNS.Commands
 
             if (!create.IsSuccess) {
                 Console.WriteLine("Could not create record {0}: {1}", name, create.Error);
-                return Fail;
+                return ICommand.Fail;
             }
 
-            return Success;
+            return ICommand.Success;
         }
     }
 }

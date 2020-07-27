@@ -49,12 +49,12 @@ namespace Bytemark.DNS
             HttpClient client = new HttpClient();
             BytemarkDNSClient _dns = new BytemarkDNSClient(client, config["Auth:Username"], config["Auth:Password"]);
 
-            if (await cmd.Execute(_dns, config) == 0) {
-                return 0;
+            if (!(await cmd.Execute(_dns, config) == ICommand.Success)) {
+                ShowUsage(commands);
+                return ICommand.Fail;
             }
 
-            ShowUsage(commands);
-            return 1;
+            return ICommand.Success;
         }
 
         private static void ShowUsage(IList<ICommand> commands)

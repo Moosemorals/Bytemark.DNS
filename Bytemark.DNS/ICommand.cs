@@ -9,7 +9,8 @@ namespace Bytemark.DNS
 {
     public interface ICommand
     {
-
+        public const int Fail = 1;
+        public const int Success = 0;
         public string Noun { get; }
 
         public string Verb { get; }
