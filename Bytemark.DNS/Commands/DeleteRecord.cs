@@ -21,7 +21,7 @@ namespace Bytemark.DNS.Commands
         {
             string name = config["name"];
 
-            if (string.IsNullOrEmpty("name")) {
+            if (string.IsNullOrEmpty(name)) {
                 Console.WriteLine("--name not given");
                 return ICommand.Fail;
             }
