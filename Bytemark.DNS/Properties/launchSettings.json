@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Bytemark.DNS": {
+      "commandName": "Project",
+      "commandLineArgs": "create record --Type TXT --name _test.moosemorals.com --ttl 3600 --content \"This is another string\""
+    }
+  }
+}

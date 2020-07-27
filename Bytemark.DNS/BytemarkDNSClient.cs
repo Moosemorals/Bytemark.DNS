@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -94,7 +95,7 @@ namespace Bytemark.DNS
             try {
 
                 request.Headers.Authorization = await GetAuthenticationHeader();
-                
+
                 HttpResponseMessage response = await _http.SendAsync(request);
                 if (response.IsSuccessStatusCode) {
 
@@ -105,16 +106,25 @@ namespace Bytemark.DNS
                         Payload = JsonConvert.DeserializeObject<T>(json),
                     };
                 } else {
-                    ErrorResponse e = JsonConvert.DeserializeObject<ErrorResponse>(await response.Content.ReadAsStringAsync());
-                    if (!string.IsNullOrEmpty(e.Error)) {
+                    string body = await response.Content.ReadAsStringAsync();
+                    try {
+                        ErrorResponse e = JsonConvert.DeserializeObject<ErrorResponse>(body);
+                        if (!string.IsNullOrEmpty(e.Error)) {
+                            return new Result<T> {
+                                Error = e.Error,
+                                StatusCode = (int)response.StatusCode,
+                                Payload = null,
+                            };
+                        } else {
+                            return new Result<T> {
+                                Error = "Can't parse error response from remote server",
+                                StatusCode = (int)response.StatusCode,
+                                Payload = null,
+                            };
+                        }
+                    } catch {
                         return new Result<T> {
-                            Error = e.Error,
-                            StatusCode = (int)response.StatusCode,
-                            Payload = null,
-                        };
-                    } else {
-                        return new Result<T> {
-                            Error = "Can't parse error resposne from remote server",
+                            Error = "Can't parse json from remote server: " + body,
                             StatusCode = (int)response.StatusCode,
                             Payload = null,
                         };

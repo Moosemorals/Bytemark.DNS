@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
+using Bytemark.DNS.Commands;
 using Bytemark.DNS.Models;
 
 using Microsoft.Extensions.Configuration;
@@ -15,42 +17,69 @@ namespace Bytemark.DNS
 {
     class Program
     {
-        private const string ACME_Challenge = "_acme-challenge.";
 
         static async Task<int> Main(string[] args)
         {
+            IList<ICommand> commands = GetCommands();
+            if (args.Length < 2) {
+                ShowUsage(commands);
+                return 1;
+            }
+
+            string verb = args[0];
+            string noun = args[1];
+
+            ICommand cmd = commands.FirstOrDefault(c => 
+                   string.Equals(c.Verb, verb, StringComparison.OrdinalIgnoreCase) 
+                && string.Equals(c.Noun, noun, StringComparison.OrdinalIgnoreCase)
+            );
+
+            if (cmd == null) {
+                Console.WriteLine("Can't find command to {0} {1}", verb, noun);
+                ShowUsage(commands);
+                return 1;
+            }
 
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("secrets.json", optional: false)
                 .AddEnvironmentVariables()
+                .AddCommandLine(args.Skip(2).ToArray())
                 .Build();
 
+            HttpClient client = new HttpClient();
+            BytemarkDNSClient _dns = new BytemarkDNSClient(client, config["Auth:Username"], config["Auth:Password"]);
 
-            if (args.Length != 1) {
-                // TODO: Proper logging
-                Console.WriteLine("Must specifiy either 'AuthHook' or 'Cleanup' as only arguments");
-                return 1;
+            if (await cmd.Execute(_dns, config) == 0) {
+                return 0;
             }
 
-            if (string.Equals(args[0], "authhook", StringComparison.OrdinalIgnoreCase)) {
-		Console.WriteLine("Running Authhook");
-                return await AuthHookAsync(config);
-            } else if (string.Equals(args[0], "cleanup", StringComparison.OrdinalIgnoreCase)) {
-                return await Cleanup(config);
-            } else {
-                // TODO: Proper logging
-                Console.WriteLine("Unrecognised command {0}", args[0]);
-                return 1;
-            }
-            
+            ShowUsage(commands);
+            return 1;
         }
+
+        private static void ShowUsage(IList<ICommand> commands)
+        {
+            Console.WriteLine("Usage: BytemarkDNS <verb> <noun> [option...]");
+            foreach (ICommand c in commands) {
+                Console.WriteLine("\t{0} {1} {2}", c.Verb, c.Noun, c.Usage);
+            }
+        }
+
+        private static IList<ICommand> GetCommands()
+        {
+            Type type = typeof(ICommand);
+
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(t => type.IsAssignableFrom(t) && t.IsClass)
+                .Select(t => (ICommand)t.GetConstructor(Type.EmptyTypes).Invoke(null))
+                .ToList();
+        }
+
+        /*
         private static async Task<int> AuthHookAsync(IConfiguration config) { 
             string targetDomainName = config["CERTBOT_DOMAIN"];
             string validationString = config["CERTBOT_VALIDATION"];
-
-            HttpClient client = new HttpClient();
-
-            BytemarkDNSClient _dns = new BytemarkDNSClient(client, config["Auth:Username"], config["Auth:Password"]);
 
             Result<IEnumerable<Domain>> domains = await _dns.ListDomainsAsync();
 
@@ -124,6 +153,6 @@ namespace Bytemark.DNS
             return 0;
         }
 
-
+*/
     }
 }
