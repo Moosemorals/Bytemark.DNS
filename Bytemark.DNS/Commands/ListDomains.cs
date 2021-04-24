@@ -19,7 +19,7 @@ namespace Bytemark.DNS.Commands {
         {
             Result<IEnumerable<Domain>> result = await client.ListDomainsAsync(Overview: true);
 
-            if (result.IsSuccess) {
+            if (result.IsSuccess && result.Payload != null) {
                 foreach (Domain d in result.Payload) {
 
                     Console.Write("Domain {0} (Account {1})", d.Name, d.AccountID);
