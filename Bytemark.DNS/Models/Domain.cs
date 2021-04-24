@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Bytemark.DNS.Models
-{
+namespace Bytemark.DNS.Models {
     public class Domain
     {
         public Domain(int? iD, string name, int accountID, IEnumerable<Record>? records) {

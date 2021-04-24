@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -114,9 +113,7 @@ namespace Bytemark.DNS {
             }
         }
 
-        private string BuildQueryString(params string[] param) {
-            return BuildQueryString(new List<string>(param));
-        }
+        private string BuildQueryString(params string[] param) => BuildQueryString(new List<string>(param));
 
         private string BuildQueryString(IList<string> param) {
             if (param == null || param.Count == 0) {
@@ -214,9 +211,7 @@ namespace Bytemark.DNS {
         /// <param name="AccountID"></param>
         /// <param name="Name">This must not end in a dot (.).</param>
         /// <returns></returns>
-        public Result<Domain> UpdateDomain(int DomainID, int AccountID, string Name) {
-            throw new NotImplementedException("This is not implemented yet, as there are no changable attributes on a domain.");
-        }
+        public Result<Domain> UpdateDomain(int DomainID, int AccountID, string Name) => throw new NotImplementedException("This is not implemented yet, as there are no changable attributes on a domain.");
 
         /// <summary>
         /// Delete a domain

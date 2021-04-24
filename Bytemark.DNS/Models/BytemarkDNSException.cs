@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Bytemark.DNS.Models
-{
-    class BytemarkDNSException : Exception
+namespace Bytemark.DNS.Models {
+    internal class BytemarkDNSException : Exception
     {
         public BytemarkDNSException(string message) : base(message)
         {

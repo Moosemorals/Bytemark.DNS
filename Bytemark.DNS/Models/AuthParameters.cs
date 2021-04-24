@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 using Newtonsoft.Json;
 
-namespace Bytemark.DNS.Models
-{
+namespace Bytemark.DNS.Models {
     internal class AuthParameters
     {
         public AuthParameters(string username, string password) {

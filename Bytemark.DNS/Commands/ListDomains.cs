@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Bytemark.DNS.Models;
 
 using Microsoft.Extensions.Configuration;
 
-namespace Bytemark.DNS.Commands
-{
+namespace Bytemark.DNS.Commands {
     internal class ListDomains : ICommand
     {
         public string Noun => "Domain";

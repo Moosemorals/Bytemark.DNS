@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Text;
 using System.Threading.Tasks;
 
 using Bytemark.DNS.Models;
 
 using Microsoft.Extensions.Configuration;
 
-namespace Bytemark.DNS.Commands
-{
+namespace Bytemark.DNS.Commands {
     internal class CreateRecord : ICommand
     {
         public string Noun => "Record";

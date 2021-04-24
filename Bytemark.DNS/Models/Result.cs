@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Bytemark.DNS.Models
-{
+﻿namespace Bytemark.DNS.Models {
     public class Result<T> where T : class
     {
         public Result(int statusCode, T? payload, string? error = null) {

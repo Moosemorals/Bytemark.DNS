@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
-using Bytemark.DNS.Commands;
-using Bytemark.DNS.Models;
 
 using Microsoft.Extensions.Configuration;
 
-namespace Bytemark.DNS
-{
-    class Program
+namespace Bytemark.DNS {
+    internal class Program
     {
-
-        static async Task<int> Main(string[] args)
+        private static async Task<int> Main(string[] args)
         {
             IList<ICommand> commands = GetCommands();
             if (args.Length < 2) {
