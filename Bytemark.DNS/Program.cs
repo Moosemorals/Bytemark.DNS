@@ -29,7 +29,7 @@ namespace Bytemark.DNS
             string verb = args[0];
             string noun = args[1];
 
-            ICommand cmd = commands.FirstOrDefault(c => 
+            ICommand? cmd = commands.FirstOrDefault(c => 
                    string.Equals(c.Verb, verb, StringComparison.OrdinalIgnoreCase) 
                 && string.Equals(c.Noun, noun, StringComparison.OrdinalIgnoreCase)
             );
@@ -72,7 +72,9 @@ namespace Bytemark.DNS
             return AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(t => type.IsAssignableFrom(t) && t.IsClass)
-                .Select(t => (ICommand)t.GetConstructor(Type.EmptyTypes).Invoke(null))
+                .Select(t => t.GetConstructor(Type.EmptyTypes))
+                .Select(c => c?.Invoke(null))
+                .OfType<ICommand>()
                 .ToList();
         }
 

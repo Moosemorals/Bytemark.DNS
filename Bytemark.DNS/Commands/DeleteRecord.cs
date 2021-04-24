@@ -26,9 +26,9 @@ namespace Bytemark.DNS.Commands
                 return ICommand.Fail;
             }
 
-            Domain targetDomain = null;
+            Domain? targetDomain = null;
             Result<IEnumerable<Domain>> domains = await client.ListDomainsAsync(Overview: true);
-            if (domains.IsSuccess) {
+            if (domains.IsSuccess && domains.Payload != null) {
                 foreach (Domain d in domains.Payload) {
                     if (name.EndsWith(d.Name)) {
                         targetDomain = d;
@@ -45,7 +45,7 @@ namespace Bytemark.DNS.Commands
                 return ICommand.Fail;
             }
 
-            Record targetRecord = null;
+            Record? targetRecord = null;
             foreach (Record r in targetDomain.Records) {
                 if (r.Name == name) {
                     targetRecord = r;

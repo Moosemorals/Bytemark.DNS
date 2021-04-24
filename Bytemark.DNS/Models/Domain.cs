@@ -9,8 +9,15 @@ namespace Bytemark.DNS.Models
 {
     public class Domain
     {
+        public Domain(int? iD, string name, int accountID, IEnumerable<Record>? records) {
+            ID=iD;
+            Name=name;
+            AccountID=accountID;
+            Records=records ?? new List<Record>();
+        }
+
         [JsonProperty("id")]
-        public int ID { get; set; }
+        public int? ID { get; set; }
 
         /// <summary>
         /// This must not end with a dot (.).

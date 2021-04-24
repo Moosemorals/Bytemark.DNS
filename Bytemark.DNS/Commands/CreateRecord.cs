@@ -30,7 +30,7 @@ namespace Bytemark.DNS.Commands
                 return ICommand.Fail;
             }
 
-            if (!Enum.TryParse<RecordType>(rawType, out RecordType type)) {
+            if (!Enum.TryParse(rawType, out RecordType type)) {
                 Console.Write("Invalid value for --type: {0}", rawType);
                 return ICommand.Fail;
             }
@@ -45,9 +45,9 @@ namespace Bytemark.DNS.Commands
                 return ICommand.Fail;
             }
 
-            Domain target = null;
+            Domain? target = null;
             Result<IEnumerable<Domain>> domains = await client.ListDomainsAsync(Overview: true);
-            if (domains.IsSuccess) {
+            if (domains.IsSuccess && domains.Payload != null) {
                 foreach (Domain d in domains.Payload) {
                     if (name.EndsWith(d.Name)) {
                         target = d;
@@ -64,10 +64,8 @@ namespace Bytemark.DNS.Commands
                 return ICommand.Fail;
             }
 
-            var create = await client.CreateRecordAsync(new Record {
-                Content = content,
+            Result<Record>? create = await client.CreateRecordAsync(new Record(name, content) {
                 DomainID = target.ID,
-                Name = name,
                 TTL = TTL,
                 Type = type,
             }) ;

@@ -9,11 +9,16 @@ namespace Bytemark.DNS.Models
 {
     public class Record
     {
+        public Record(string name, string content) {
+            Name=name;
+            Content=content;
+        }
+
         [JsonProperty("id")]
         public int ID { get; set; }
 
         [JsonProperty("domain_id"), JsonRequired]
-        public int DomainID { get; set; }
+        public int? DomainID { get; set; }
 
         /// <summary>
         /// Fully qualified hostname for the record. Must be a sub-domain of

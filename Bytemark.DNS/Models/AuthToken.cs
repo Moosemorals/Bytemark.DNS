@@ -6,9 +6,14 @@ namespace Bytemark.DNS.Models
 {
     internal class AuthToken
     {
-        public string Token { get; set; }
+        public AuthToken(string token, DateTimeOffset lastUpdated) {
+            Token=token;
+            LastUpdated=lastUpdated;
+        }
 
-        public DateTimeOffset LastUpdated { get; set; }
+        public string Token { get; init; }
+
+        public DateTimeOffset LastUpdated { get;set; }
 
         public bool IsFresh {
             get {
